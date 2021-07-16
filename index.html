@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+		<title>Clash</title>
+		<h1 id="h1"></h1> 
+		<h1 id="h2"></h1>
+		<h3 id="h3"></h3> 
+		<style>
+			#h2 {
+				color: Red
+			}
+			#h3 {
+				color: Blue
+			}
+		</style>
+
+	</head>
+	<body>
+		<canvas id="myCanvas" width="500" height="500" style="border:0px solid #c3c3c3;">
+	 	<script>
+	 		var movenum = 1;
+	 		var roundnum = 3;
+	 		var winnum = 0;
+	 		var winnum2 = 0;
+	 		
+	 		var you;
+	 		var you2;
+	 		function draw(x, y, width, height, color) {
+	 			ctx.fillStyle = color;
+	 			ctx.fillRect(x, y, width, height);
+	 		}
+	 		
+	 		function studio() {
+	 			ctx.fillStyle = "blue";
+	 			ctx.font = "30px Arial";
+				ctx.fillText("HENDERSON STUDIOS", 75, 200);
+				ctx.fillStyle = "green";
+	 			ctx.font = "30px Arial";
+				ctx.fillText("From", 75, 170);
+				ctx.fillStyle = "black";
+				ctx.font = "50px Arial";
+				ctx.fillText("CLASH", 75, 250);
+				ctx.fillStyle = "red";
+				ctx.font = "20px Arial";
+				ctx.fillText("By: Baxter Henderson", 75, 270);
+	 		}
+	 		
+	 		function instructions() {
+	 			ctx.fillStyle = "black";
+	 			ctx.font = "30px Arial";
+	 			ctx.fillText("P1, WASD to move, space to sword.", 15, 200);
+	 		}
+	 		
+	 		function instructions2() {
+	 			ctx.fillStyle = "black";
+	 			ctx.font = "30px Arial";
+	 			ctx.fillText("P2, arrows to move, shift to sword.", 15, 200);
+	 		}
+	 		
+	 		function instructions3() {
+	 			ctx.fillStyle = "black";
+	 			ctx.font = "30px Arial";
+	 			ctx.fillText("Tab to withdraw.", 15, 200);
+	 		}
+	 		
+	 		function hide() {
+				document.getElementById("h3").style.display = "none";
+			}
+			function show() {
+				document.getElementById("h3").style.display = "block";
+			}
+	
+			function write(write) {
+				document.getElementById("h3").innerHTML = write;
+			}
+	 		
+	 		var hasused1 = 0;
+	 		var hasused2 = 0;
+	 		var guylist = [];
+	 	
+	 		var canvas = document.getElementById("myCanvas");
+			var ctx = canvas.getContext("2d");
+			
+			draw(0, 0, 500, 500, "black");
+			setTimeout(draw, 500, 0, 0, 500, 500, "red");
+			setTimeout(draw, 1000, 0, 0, 500, 500, "blue");
+			setTimeout(draw, 1500, 0, 0, 500, 500, "green");
+			setTimeout(draw, 2000, 0, 0, 500, 500, "orange");
+			setTimeout(draw, 2500, 0, 0, 500, 500, "purple");
+			setTimeout(draw, 3000, 0, 0, 500, 500, "black");
+			setTimeout(draw, 3500, 0, 0, 500, 500, "white");
+			setTimeout(studio, 4000);
+			setTimeout(draw, 6000, 0, 0, 500, 500, "white");
+			setTimeout(instructions, 6001);
+			setTimeout(draw, 9000, 0, 0, 500, 500, "white");
+			setTimeout(instructions2, 9001);
+			setTimeout(draw, 12000, 0, 0, 500, 500, "white");
+			setTimeout(instructions3, 12001);
+			setTimeout(draw, 15000, 0, 0, 500, 500, "white");
+			setTimeout(display, 15001);
+
+			
+			
+			function checkyou() {
+				you.check();
+				you2.check();
+			}
+			
+			function sayLose(name) {
+				roundnum -= 1;
+								
+	 			hasused1 = 0;
+	 			hasused2 = 0;
+	 				 			 			
+	 			you.health = 40;
+	 			you2.health = 40;
+	 			
+				you.drawCharacter(you.x, you.y, "white", 15, 15);			
+				you.drawCharacter(you2.x, you2.y, "white", 15, 15);			 			
+	 			
+				you.x = 300;
+				you2.x = 100;
+				you.y = 400;
+				you2.y = 200;
+				
+				you.drawCharacter(you.x, you.y, you.color, 15, 15);			
+				you.drawCharacter(you2.x, you2.y, you2.color, 15, 15);
+				
+				show();
+				if (name === "P2") {
+					write("P1 wins! Only " + roundnum + " round(s) left!");
+					winnum++;
+				} else {
+					write("P2 wins Only " + roundnum + " game(s) to go!");
+					winnum2++;
+				}
+				setTimeout(hide, 2000);
+				
+				if (roundnum === 0) {
+					movenum++;
+					if (winnum > winnum2) {
+						write("P1 wins! The game...");
+					} else {
+						write("P2 wins! The game...");
+					}
+					if (movenum === 2) {
+						alert("A new move is introduced, double stab.");
+						alert("P1; q or Q, P2, ' ");
+					}
+					if (movenum === 3) {
+						alert("A new move is introduced, Heal.");
+						alert("It can only be used once a round.");
+						alert("P1; eE, P2; ?/");
+					}
+					
+					you.drawCharacter(you.x, you.y, you.color, 15, 15);
+					you2.drawCharacter(you2.x, you2.y, you2.color, 15, 15);
+					roundnum = 3;
+				}
+			}
+			
+	 		class Character {
+	 			check() {
+	 				if (this.swordColor == "green") {
+	 					var retval = this.touchingColor(ctx, 0, 0, 255);
+	 				}
+	 				if (this.swordColor == "blue") {
+	 					var retval = this.touchingColor(ctx, 0, 128, 0);
+	 				}
+	 				if (retval) {
+	 					this.health = this.health - 5;
+	 				}
+	 				if (this.health < 1) {
+	 					sayLose(this.name);
+	 				}
+					document.getElementById("h1").innerHTML = you.health;
+					document.getElementById("h2").innerHTML = you2.health;
+	 			}
+	 			attack() {
+	 				if (this.lastDX === 5) {
+	 					this.drawCharacter(this.x + 15, this.y + 5, this.swordColor, 10, 5);
+	 					setTimeout(this.drawCharacter, 500, this.x + 15, this.y + 5, "white", 10, 5);
+	 				}
+	 				if (this.lastDX === -5) {
+	 					this.drawCharacter(this.x - 10, this.y + 5, this.swordColor, 10, 5);
+	 					setTimeout(this.drawCharacter, 500, this.x - 10, this.y + 5, "white", 10, 5)
+	 				}
+	 				if (this.lastDY === 5) {
+	 					this.drawCharacter(this.x + 5, this.y + 15, this.swordColor, 5, 10);
+	 					setTimeout(this.drawCharacter, 500, this.x + 5, this.y + 15, "white", 5, 10)
+	 				}
+	 				if (this.lastDY === -5) {
+	 					this.drawCharacter(this.x + 5, this.y - 10, this.swordColor, 5, 10);
+	 					setTimeout(this.drawCharacter, 500, this.x + 5, this.y - 10, "white", 5, 10);
+	 				}
+	 			}
+	 			sattack() {
+	 				if (this.lastDX === 5) {
+	 					this.drawCharacter(this.x + 15, this.y + 5, this.swordColor, 10, 5);
+	 					setTimeout(this.drawCharacter, 250, this.x + 15, this.y + 5, "white", 10, 5);
+	 					setTimeout(this.drawCharacter, 500, this.x + 15, this.y + 5, this.swordColor, 10, 5);
+	 					setTimeout(this.drawCharacter, 750, this.x + 15, this.y + 5, "white", 10, 5);
+	 				}
+	 				if (this.lastDX === -5) {
+	 					this.drawCharacter(this.x - 10, this.y + 5, this.swordColor, 10, 5);
+	 					setTimeout(this.drawCharacter, 250, this.x - 10, this.y + 5, "white", 10, 5);
+	 					setTimeout(this.drawCharacter, 500, this.x - 10, this.y + 5, this.swordColor, 10, 5);
+	 					setTimeout(this.drawCharacter, 750, this.x - 10, this.y + 5, "white", 10, 5);
+	 				}
+	 				if (this.lastDY === 5) {
+	 					this.drawCharacter(this.x + 5, this.y + 15, this.swordColor, 5, 10);
+	 					setTimeout(this.drawCharacter, 250, this.x + 5, this.y + 15, "white", 5, 10);
+	 					setTimeout(this.drawCharacter, 500, this.x + 5, this.y + 15, this.swordColor, 5, 10);
+	 					setTimeout(this.drawCharacter, 750, this.x + 5, this.y + 15, "white", 5, 10);
+	 				}
+	 				if (this.lastDY === -5) {
+	 					this.drawCharacter(this.x + 5, this.y - 10, this.swordColor, 5, 10);
+	 					setTimeout(this.drawCharacter, 250, this.x + 5, this.y - 10, "white", 5, 10);
+	 					setTimeout(this.drawCharacter, 500, this.x + 5, this.y - 10, this.swordColor, 5, 10);
+	 					setTimeout(this.drawCharacter, 750, this.x + 5, this.y - 10, "white", 5, 10);
+	 				}
+	 			}
+	 		
+	 			constructor(x, y, color, lastDX, lastDY, health, name, swordColor) {
+	 				this.name = name;
+	 				this.health = health;
+					this.x = x;
+					this.y = y;
+					this.color = color;
+					this.lastDX = lastDX; 
+					this.lastDY = lastDY; 
+					this.swordColor = swordColor;
+				}
+	 			move(DX, DY) {
+	 				this.drawCharacter(this.x, this.y, "white", 15, 15)
+	 				this.x = this.x + DX;
+	 				this.y = this.y + DY;
+	 				
+	 				if (this.touchingColor(ctx, 255, 255, 0)) {
+						this.x = this.x - DX;
+						this.y = this.y - DY;
+					}
+					
+	 				this.drawCharacter(this.x, this.y, this.color, 15, 15)
+	 				this.lastDX = DX;
+	 				this.lastDY = DY;
+	 			}
+	 			drawCharacter(x, y, color, w, h) {
+	 				ctx.fillStyle = color;
+	 				ctx.fillRect(x, y, w, h);
+	 			}
+	 			touchingColor(ctx,r,g,b) {
+					var data = ctx.getImageData(this.x - 1,this.y - 1, 17, 17).data;
+					for(var i = 0; i < data.length; i += 4){
+						if(
+							(data[i+0])==r&&
+							(data[i+1])==g&&
+							(data[i+2])==b
+						){
+							return true;
+						}
+					}
+					return false;
+				}
+	 		}
+	 		function display() {
+				you = new Character(100, 100, "black", 0, 0, 40, "P1", "blue");
+				you2 = new Character(200, 200, "red", 0, 0, 40, "P2", "green");
+			
+				guylist.push("you");
+				guylist.push("you2");
+			
+				document.getElementById("h1").innerHTML = you.health;
+				document.getElementById("h2").innerHTML = you2.health;
+			
+				you.drawCharacter(you.x, you.y, you.color, 15, 15);
+				you2.drawCharacter(you2.x, you2.y, you2.color, 15, 15);
+				
+				ctx.fillStyle = "Yellow";
+				ctx.fillRect(150, 100, 30, 50);
+				ctx.fillRect(300, 300, 50, 30);
+				ctx.fillRect(150, 400, 50, 30);
+				ctx.fillRect(300, 100, 30, 50);
+				ctx.fillRect(400, 400, 30, 50);
+				ctx.fillRect(50, 50, 50, 50);
+				ctx.fillRect(200, 250, 30, 30);
+				
+				setInterval(checkyou, 500);
+	 		}
+	 		
+			function moveYou(event) {
+				if (event.which == 87) {
+					you.move(0, -5);
+				}
+				if (event.which == 65) {
+					you.move(-5, 0);
+				}
+				if (event.which == 83) {
+					you.move(0, 5);
+				}
+				if (event.which == 68) {
+					you.move(5, 0);
+				}
+				if (event.which == 32) {
+					you.attack();
+				}
+				if (event.which == 9) {
+					location.reload();
+					alert("Withdrawal(the battle ended)");
+				}
+				if (movenum > 2) {
+					if (event.which == 69) {
+						if (hasused2 < 1) {
+							you2.health = you2.health + 10;
+							hasused2 = 1;
+						}
+					}
+				}
+				if (movenum > 1) {
+					if (event.which == 81) {
+						you.sattack();
+					}
+				}
+			}
+			function moveYou2(event) {
+				if (event.which == 38) {
+					you2.move(0, -5);
+				}
+				if (event.which == 37) {
+					you2.move(-5, 0);
+				}
+				if (event.which == 40) {
+					you2.move(0, 5);
+				}
+				if (event.which == 39) {
+					you2.move(5, 0);
+				}
+				if (event.which == 16) {
+					you2.attack();
+				}
+				if (movenum > 2) {
+					if (event.which == 191) {
+						if (hasused2 < 1) {
+							you2.health = you2.health + 10;
+							hasused2 = 1;
+						}
+					}
+				}
+				if (movenum > 1) {
+					if (event.which == 222) {
+						you2.sattack();
+					}
+				}
+			}
+		document.addEventListener("keydown", moveYou);
+		document.addEventListener("keydown", moveYou2);
+
+	 	</script>	
+	</body>
+</html>
